@@ -3,58 +3,71 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../layout/Header";
 import Menu from "../layout/Menu";
-import { updateTransaction,removeTransaction } from "../redux-toolkit/transaction"; // Unified actions for both income and expense
-import { PlusCircleOutlined } from "@ant-design/icons";
-
+import {
+  updateTransaction,
+  removeTransaction,
+} from "../redux-toolkit/transaction"; // Unified actions for both income and expense
+import { transactionTypes } from "../component/ExpenseItem";
+import { showSuccessToast, showErrorToast } from '../component/Toaste.js';
 function UpdatePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
-  const allTransactions = useSelector((state) => state.transactions.transactions);
-  const states = useSelector((state) => state);//check
+  const allTransactions = useSelector(
+    (state) => state.transactions.transactions
+  );
+  const states = useSelector((state) => state); //check
   const transaction = allTransactions.find((t) => t.id === id);
 
   const [date, setDate] = useState(transaction ? transaction.date : "");
-  const [category, setCategory] = useState(transaction ? transaction.category : "Shopping");
-  const [description, setDescription] = useState(transaction ? transaction.description : "");
-  const [amount, setAmount] = useState(transaction ? transaction.amount : "");
+  const [category, setCategory] = useState(
+    transaction ? transaction.category : "Shopping"
+  );
+  const [description, setDescription] = useState(
+    transaction ? transaction.description : ""
+  );
+  const [amount, setAmount] = useState(
+    transaction ? Math.abs(transaction.amount) : ""
+  );
   const [receipt, setReceipt] = useState(null);
-  const [isExpense, setIsExpense] = useState(transaction ? transaction.transactionType === "expense" : true); 
-//   useEffect(() => {
-//     if (!transaction) {
-//       navigate("/"); 
-//     }
-//   }, [transaction, navigate]);
+  const [isExpense, setIsExpense] = useState(
+    transaction ? transaction.transactionType === "expense" : true
+  );
+  //   useEffect(() => {
+  //     if (!transaction) {
+  //       navigate("/");
+  //     }
+  //   }, [transaction, navigate]);
 
   const handleSave = () => {
     if (!date || !category || !description || !amount) {
-      alert("Please fill out all fields.");
+      showErrorToast("Vui lòng nhập đầy đủ")
       return;
     }
-    console.log(states)
+    console.log(states);
+    console.log(amount);
     const updatedTransaction = {
-      id,  
+      id,
       updatedData: {
         date,
         category,
         description,
-        amount: parseFloat(amount),
+        amount: isExpense ? -amount : amount,
         receipt,
-        transactionType: isExpense ? "expense" : "income", 
+        transactionType: isExpense ? "expense" : "income",
       },
     };
 
     dispatch(updateTransaction(updatedTransaction));
-
-    navigate("/"); 
+    showSuccessToast("Sửa thành công")
+    navigate("/");
   };
 
   const handleDelete = () => {
     dispatch(removeTransaction(id));
-
-    navigate("/"); // Redirect to home after deleting
+    showSuccessToast("Xóa thành công !")
+    navigate("/"); 
   };
 
   return (
@@ -65,7 +78,9 @@ function UpdatePage() {
           <div className="flex border rounded-[15px] h-[32px] bg-[#D9D9D9]">
             <button
               className={`flex-1 h-full rounded-l-[15px] ${
-                isExpense ? "bg-[#42224A] text-white" : "bg-transparent text-black"
+                isExpense
+                  ? "bg-[#42224A] text-white"
+                  : "bg-transparent text-black"
               }`}
               onClick={() => setIsExpense(true)}
             >
@@ -73,7 +88,9 @@ function UpdatePage() {
             </button>
             <button
               className={`flex-1 h-full rounded-r-[15px] ${
-                !isExpense ? "bg-[#42224A] text-white" : "bg-transparent text-black"
+                !isExpense
+                  ? "bg-[#42224A] text-white"
+                  : "bg-transparent text-black"
               }`}
               onClick={() => setIsExpense(false)}
             >
@@ -92,15 +109,15 @@ function UpdatePage() {
 
           <div>
             <select
-              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3 "
+              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option>Shopping</option>
-              <option>Bill</option>
-              <option>Salary</option>
-              <option>Food</option>
-              <option>Entertainment</option>
+              {transactionTypes.map((item) => (
+                <option key={item.type} value={item.type}>
+                  {item.type}
+                </option>
+              ))}
             </select>
           </div>
 

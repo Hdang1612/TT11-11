@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { addTransaction } from "../redux-toolkit/transaction";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import Header from "../layout/Header";
 import Menu from "../layout/Menu";
-
+import { transactionTypes } from "../component/ExpenseItem";
+import { showSuccessToast, showErrorToast } from '../component/Toaste.js';
 function ExpensePage() {
   const dispatch = useDispatch();
 
@@ -13,12 +14,12 @@ function ExpensePage() {
   const [category, setCategory] = useState("Shopping");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [receipt, setReceipt] = useState(null);  
-  const [isExpense, setIsExpense] = useState(true);  
+  const [receipt, setReceipt] = useState(null);
+  const [isExpense, setIsExpense] = useState(true);
 
   const handleSave = () => {
     if (!date || !category || !description || !amount) {
-      alert("Please fill out all fields.");
+      showErrorToast("Vui lòng nhập đầy đủ")
       return;
     }
 
@@ -27,13 +28,13 @@ function ExpensePage() {
       date,
       category,
       description,
-      amount: parseFloat(amount),
+      amount: isExpense ? -amount : +amount,
       receipt,
-      transactionType: isExpense ? 'expense' : 'income',  
+      transactionType: isExpense ? "expense" : "income",
     };
 
     dispatch(addTransaction(newTransaction));
-
+    showSuccessToast("Thêm thành công")
     setDate("");
     setCategory("Shopping");
     setDescription("");
@@ -50,17 +51,21 @@ function ExpensePage() {
           <div className="flex border rounded-[15px] h-[32px] bg-[#D9D9D9]">
             <button
               className={`flex-1 h-full rounded-l-[15px] ${
-                isExpense ? "bg-[#42224A] text-white" : "bg-transparent text-black"
+                isExpense
+                  ? "bg-[#42224A] text-white"
+                  : "bg-transparent text-black"
               }`}
-              onClick={() => setIsExpense(true)} 
+              onClick={() => setIsExpense(true)}
             >
               Expense
             </button>
             <button
               className={`flex-1 h-full rounded-r-[15px] ${
-                !isExpense ? "bg-[#42224A] text-white" : "bg-transparent text-black"
+                !isExpense
+                  ? "bg-[#42224A] text-white"
+                  : "bg-transparent text-black"
               }`}
-              onClick={() => setIsExpense(false)} 
+              onClick={() => setIsExpense(false)}
             >
               Income
             </button>
@@ -75,21 +80,18 @@ function ExpensePage() {
             />
           </div>
 
-          <div>
-            <select
-              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option>Shopping</option>
-              <option>Bill</option>
-              <option>Salary</option>
-              <option>Food</option>
-              <option>Entertainment</option>
-            </select>
-          </div>
+          <select
+            className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {transactionTypes.map((item) => (
+              <option key={item.type} value={item.type}>
+                {item.type}
+              </option>
+            ))}
+          </select>
 
-          {/* Description Input */}
           <div>
             <input
               type="text"
@@ -100,7 +102,6 @@ function ExpensePage() {
             />
           </div>
 
-          {/* Amount Input */}
           <div>
             <input
               type="number"
@@ -113,7 +114,9 @@ function ExpensePage() {
 
           {/* Receipt Upload */}
           <div>
-            <label className="text-sm font-semibold">Expense Receipt Image</label>
+            <label className="text-sm font-semibold">
+              Expense Receipt Image
+            </label>
             <input
               type="file"
               className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
