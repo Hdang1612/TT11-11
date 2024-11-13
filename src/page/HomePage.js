@@ -12,7 +12,7 @@ import {
 } from "../component/ChartStatistic";
 function HomePage() {
   const balance = useSelector((state) => state.transactions.totalBalance);
-  const [filter, setFilter] = useState("monthly");
+  const [filter, setFilter] = useState("today");
 
   const handleFilterChange = (filterType) => {
     setFilter(filterType);

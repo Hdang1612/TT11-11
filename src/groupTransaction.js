@@ -13,6 +13,8 @@ export const formatDate = (dateStr) => {
   const options = { day: "2-digit", month: "short" }; // "11 Nov"
   return date.toLocaleDateString("en-US", options);
 };
+
+
 export const groupByDate = (transactions) => {
   const grouped = transactions.reduce((acc, transaction) => {
     const date = formatDate(transaction.date);
@@ -21,11 +23,15 @@ export const groupByDate = (transactions) => {
     return acc;
   }, {});
 
-  const sortedDates = Object.keys(grouped).sort(
-    (a, b) => new Date(b) - new Date(a)
-  );
+  const sortedDates = Object.keys(grouped).sort((a, b) => {
+    if (a === "Today") return -1; 
+    if (b === "Today") return 1;
+    return new Date(b) - new Date(a); 
+  });
+
   return { grouped, sortedDates };
 };
+
 
 export const groupByWeekly = (transactions) => {
   const grouped = {};

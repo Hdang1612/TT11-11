@@ -175,7 +175,6 @@ export const ChartStatisticBalance = () => {
       const expenseData = [];
       const balanceData = [];
 
-      // Tạo danh sách các tháng từ tháng 1 đến tháng 12
       const allMonths = [
         "Jan 2024",
         "Feb 2024",

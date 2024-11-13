@@ -87,7 +87,7 @@ function UpdatePage() {
               Expense
             </button>
             <button
-              className={`flex-1 h-full rounded-r-[15px]  md:text-2xl${
+              className={`flex-1 h-full rounded-r-[15px]  md:text-2xl ${
                 !isExpense
                   ? "bg-[#42224A] text-white"
                   : "bg-transparent text-black"
