@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2"; // Biểu đồ cột
+import { Bar, Pie } from "react-chartjs-2"; // Biểu đồ cột
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -193,7 +193,6 @@ export const ChartStatisticBalance = () => {
       allMonths.forEach((month) => {
         labels.push(month.split(" ")[0]);
 
-        // Lấy thông tin thống kê từ tháng trong dữ liệu monthlyStats
         const stats = monthlyStats[month]
           ? monthlyStats[month]
           : {
@@ -207,28 +206,14 @@ export const ChartStatisticBalance = () => {
         balanceData.push(stats.balance);
       });
 
-      console.log("Income Data: ", incomeData);
-      console.log("Expense Data: ", expenseData);
-      console.log("Balance Data: ", balanceData);
-      console.log("label: ", labels);
+      //   console.log("Income Data: ", incomeData);
+      //   console.log("Expense Data: ", expenseData);
+      //   console.log("Balance Data: ", balanceData);
+      //   console.log("label: ", labels);
 
       setChartData({
         labels,
         datasets: [
-        //   {
-        //     label: "Income",
-        //     data: incomeData,
-        //     backgroundColor: "rgba(75, 192, 192, 0.6)", // Màu nền cho cột thu nhập
-        //     borderColor: "rgba(75, 192, 192, 1)", // Đường viền cột thu nhập
-        //     borderWidth: 1,
-        //   },
-        //   {
-        //     label: "Expense",
-        //     data: expenseData,
-        //     backgroundColor: "rgba(255, 99, 132, 0.6)", // Màu nền cho cột chi tiêu
-        //     borderColor: "rgba(255, 99, 132, 1)", // Đường viền cột chi tiêu
-        //     borderWidth: 1,
-        //   },
           {
             label: "Balance",
             data: balanceData,
@@ -259,6 +244,46 @@ export const ChartStatisticBalance = () => {
         />
       ) : (
         <p>Loading chart data...</p>
+      )}
+    </div>
+  );
+};
+
+export const PieStatisticMonth = ({ month }) => {
+  const groupedTransactions = useSelector(
+    (state) => state.transactions.groupedTransactions?.monthly || {}
+  );
+  const [pieData, setPieData] = useState({});
+
+  useEffect(() => {
+    const monthlyStats = groupedTransactions?.stats || {};
+    const stats = monthlyStats[month + " 2024"] || { income: 0, expense: 0 };
+    // console.log("data:", monthlyStats);
+    // console.log(stats);
+    const data = {
+      labels: ["Income", "Expense"],
+      datasets: [
+        {
+          data: [stats.income, stats.expense],
+          backgroundColor: [
+            "rgba(75, 192, 192, 0.6)",
+            "rgba(255, 99, 132, 0.6)",
+          ],
+          borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+          borderWidth: 1,
+        },
+      ],
+    };
+
+    setPieData(data);
+  }, [groupedTransactions, month]);
+
+  return (
+    <div style={{ width: "300px", height: "300px" }}>
+      {pieData.labels ? (
+        <Pie data={pieData} options={{ responsive: true }} />
+      ) : (
+        <p>Loading pie chart data...</p>
       )}
     </div>
   );

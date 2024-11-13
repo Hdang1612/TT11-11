@@ -41,7 +41,7 @@ function UpdatePage() {
   //   }, [transaction, navigate]);
 
   const handleSave = () => {
-    if (!date || !category || !description || !amount) {
+    if (!date || !category || !amount) {
       showErrorToast("Vui lòng nhập đầy đủ")
       return;
     }
@@ -79,7 +79,7 @@ function UpdatePage() {
             <button
               className={`flex-1 h-full rounded-l-full md:text-2xl ${
                 isExpense
-                  ? "bg-[#42224A] text-white"
+                  ? "bg-[#EF8767] text-white"
                   : "bg-transparent text-black"
               }`}
               onClick={() => setIsExpense(true)}
@@ -87,9 +87,9 @@ function UpdatePage() {
               Expense
             </button>
             <button
-              className={`flex-1 h-full rounded-r-[15px]  md:text-2xl ${
+              className={`flex-1 h-full rounded-r-[15px]  md:rounded-r-full md:text-2xl ${
                 !isExpense
-                  ? "bg-[#42224A] text-white"
+                  ? "bg-[#EF8767] text-white"
                   : "bg-transparent text-black"
               }`}
               onClick={() => setIsExpense(false)}
@@ -155,13 +155,13 @@ function UpdatePage() {
           <div className="flex justify-between mt-4">
             <button
               onClick={handleDelete}
-              className="w-[48%] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#42224A] rounded-[15px] font-bold text-[14px] text-white"
+              className="w-[48%] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#CFBBD4] rounded-[15px] font-bold text-[14px] text-black"
             >
               Delete
             </button>
             <button
               onClick={handleSave}
-              className="w-[48%] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#42224A] rounded-[15px] font-bold text-[14px] text-white"
+              className="w-[48%] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#EF8767] rounded-[15px] font-bold text-[14px] text-white"
             >
               Save
             </button>

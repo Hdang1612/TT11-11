@@ -14,7 +14,7 @@ const ExpenseList = ({ filter }) => {
  
 
   return (
-    <div className='max-h-[600px]  md:max-h-[520px]'>
+    <div className='max-h-[560px]  md:max-h-[460px]'>
       {groupedTransactions?.sorted?.map((group) => (
         <div key={group}>
           <p className=" text-[16px] font-medium">{group}</p>

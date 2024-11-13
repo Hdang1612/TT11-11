@@ -33,7 +33,7 @@ function HomePage() {
               </span>
             </div>
           </div> 
-          <div className="statistic-container w-full h-[120px] sm:h-[200px] flex gap-4 ">
+          <div className="statistic-container w-full h-[120px] h-[200px] flex gap-4 ">
           <div className=" w-full block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
             <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance>
           </div>

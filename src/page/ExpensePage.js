@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { addTransaction } from "../redux-toolkit/transaction";
@@ -6,7 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import Header from "../layout/Header";
 import Menu from "../layout/Menu";
 import { transactionTypes } from "../component/ExpenseItem";
-import { showSuccessToast, showErrorToast } from '../component/Toaste.js';
+import { showSuccessToast, showErrorToast } from "../component/Toaste.js";
+import { Link } from "react-router-dom";
 function ExpensePage() {
   const dispatch = useDispatch();
 
@@ -16,10 +17,15 @@ function ExpensePage() {
   const [amount, setAmount] = useState("");
   const [receipt, setReceipt] = useState(null);
   const [isExpense, setIsExpense] = useState(true);
+  useEffect(() => {
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0]; // Lấy ngày theo định dạng yyyy-mm-dd
+    setDate(formattedDate);
+  }, []);
 
   const handleSave = () => {
-    if (!date || !category || !description || !amount) {
-      showErrorToast("Vui lòng nhập đầy đủ")
+    if (!date || !category || !amount) {
+      showErrorToast("Vui lòng nhập đầy đủ");
       return;
     }
 
@@ -34,7 +40,7 @@ function ExpensePage() {
     };
 
     dispatch(addTransaction(newTransaction));
-    showSuccessToast("Thêm thành công")
+    showSuccessToast("Thêm thành công");
     setDate("");
     setCategory("Shopping");
     setDescription("");
@@ -45,14 +51,14 @@ function ExpensePage() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="w-full  h-[100vh] bg-white relative border-black border-2">
-        <Header isUpdate={false} />
+        <Header />
         <div className="px-4 py-6 space-y-4 text-[14px] font-bold xl:w-[70vw] md:mx-auto">
           {/* Toggle Expense/Income */}
           <div className="flex border rounded-[15px] h-[32px] md:h-[60px] md:rounded-full bg-[#D9D9D9]">
             <button
               className={`flex-1 h-full rounded-l-full md:h-[60px] md:text-2xl  ${
                 isExpense
-                  ? "bg-[#42224A] text-white"
+                  ? "bg-[#EF8767] text-white"
                   : "bg-transparent text-black"
               }`}
               onClick={() => setIsExpense(true)}
@@ -60,9 +66,9 @@ function ExpensePage() {
               Expense
             </button>
             <button
-              className={`flex-1 h-full rounded-r-[15px] md:h-[60px] md:text-2xl  ${
+              className={`flex-1 h-full rounded-r-[15px] md:h-[60px] md:rounded-r-full md:text-2xl  ${
                 !isExpense
-                  ? "bg-[#42224A] text-white"
+                  ? "bg-[#EF8767] text-white"
                   : "bg-transparent text-black"
               }`}
               onClick={() => setIsExpense(false)}
@@ -114,7 +120,7 @@ function ExpensePage() {
 
           {/* Receipt Upload */}
           <div>
-            <label className="text-sm font-semibold md-text-xl" >
+            <label className="text-sm font-semibold md-text-xl">
               Expense Receipt Image
             </label>
             <input
@@ -126,12 +132,12 @@ function ExpensePage() {
 
           {/* Action Buttons */}
           <div className="flex justify-between mt-4">
-            <button className="w-[48%] h-[32px] bg-[#42224A] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white">
+            <Link to="/" className="w-[48%] h-[32px] bg-[#CFBBD4] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-black flex items-center justify-center text-center ">
               Cancel
-            </button>
+            </Link>
             <button
               onClick={handleSave}
-              className="w-[48%] h-[32px] bg-[#42224A] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white"
+              className="w-[48%] h-[32px] bg-[#EF8767] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white"
             >
               Save
             </button>
