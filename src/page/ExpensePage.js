@@ -44,13 +44,13 @@ function ExpensePage() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="w-[360px] h-[90vh] bg-white relative border-black border-2">
-        <Header />
-        <div className="px-4 py-6 space-y-4 text-[14px] font-bold">
+      <div className="w-full  h-[100vh] bg-white relative border-black border-2">
+        <Header isUpdate={false} />
+        <div className="px-4 py-6 space-y-4 text-[14px] font-bold xl:w-[70vw] md:mx-auto">
           {/* Toggle Expense/Income */}
-          <div className="flex border rounded-[15px] h-[32px] bg-[#D9D9D9]">
+          <div className="flex border rounded-[15px] h-[32px] md:h-[60px] md:rounded-full bg-[#D9D9D9]">
             <button
-              className={`flex-1 h-full rounded-l-[15px] ${
+              className={`flex-1 h-full rounded-l-full md:h-[60px] md:text-2xl  ${
                 isExpense
                   ? "bg-[#42224A] text-white"
                   : "bg-transparent text-black"
@@ -60,7 +60,7 @@ function ExpensePage() {
               Expense
             </button>
             <button
-              className={`flex-1 h-full rounded-r-[15px] ${
+              className={`flex-1 h-full rounded-r-[15px] md:h-[60px] md:text-2xl  ${
                 !isExpense
                   ? "bg-[#42224A] text-white"
                   : "bg-transparent text-black"
@@ -74,14 +74,14 @@ function ExpensePage() {
           <div>
             <input
               type="date"
-              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
+              className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
           </div>
 
           <select
-            className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
+            className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -95,7 +95,7 @@ function ExpensePage() {
           <div>
             <input
               type="text"
-              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
+              className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
               placeholder="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -105,7 +105,7 @@ function ExpensePage() {
           <div>
             <input
               type="number"
-              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
+              className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
               placeholder="Amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
@@ -114,24 +114,24 @@ function ExpensePage() {
 
           {/* Receipt Upload */}
           <div>
-            <label className="text-sm font-semibold">
+            <label className="text-sm font-semibold md-text-xl" >
               Expense Receipt Image
             </label>
             <input
               type="file"
-              className="w-full rounded-[15px] h-[32px] bg-[#D9D9D9] font-bold text-[14px] px-3"
+              className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
               onChange={(e) => setReceipt(e.target.files[0])}
             />
           </div>
 
           {/* Action Buttons */}
           <div className="flex justify-between mt-4">
-            <button className="w-[48%] h-[32px] bg-[#42224A] rounded-[15px] font-bold text-[14px] text-white">
+            <button className="w-[48%] h-[32px] bg-[#42224A] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white">
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="w-[48%] h-[32px] bg-[#42224A] rounded-[15px] font-bold text-[14px] text-white"
+              className="w-[48%] h-[32px] bg-[#42224A] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white"
             >
               Save
             </button>

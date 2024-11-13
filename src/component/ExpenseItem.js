@@ -24,19 +24,19 @@ const ExpenseItem = ({ name, description, amount }) => {
   return (
     <div className="flex items-center  p-2 rounded-lg">
       <div
-        className={`w-[47px] h-[47px] flex items-center justify-center rounded-full text-black bg-[#CFBBD4] text-[20px] `}
+        className={`w-[47px] h-[47px] flex items-center justify-center rounded-full text-black bg-[#CFBBD4] text-[20px] md:w-[70px] md:h-[70px] md:text-[30px]  `}
         
       >
         {icon}
         {/* <ShoppingCartOutlined className="text-[20px]"></ShoppingCartOutlined> */}
       </div>
       <div className="ml-3">
-        <p className="text-[16px] font-regular text-[#000000]">{name}</p>
-        <p className="text-[12px] font-semibold text-[#AEABAB]">
+        <p className="text-[16px] md:text-2xl font-regular text-[#000000]">{name}</p>
+        <p className="text-[12px] md:text-xl font-semibold text-[#AEABAB]">
           {description}
         </p>
       </div>
-      <div className="ml-auto text-[16px] font-semibold text-[#000000]"> 
+      <div className="ml-auto text-[16px] md:text-2xl font-semibold text-[#000000]"> 
         {formatCurrency(amount)}
       </div>
     </div>

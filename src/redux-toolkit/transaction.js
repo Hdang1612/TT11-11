@@ -1,7 +1,7 @@
 // transactionSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { getFromStorage, saveToStorage } from './localStorage.js';
-import { formatDate,groupByDate, groupByWeekly, groupByMonthly } from '../groupTransaction.js';
+import {groupByDate, groupByWeekly, groupByMonthly } from '../groupTransaction.js';
 const calculateInitialBalances = (transactions) => {
   const income = transactions
     .filter(transaction => transaction.transactionType === 'income')
@@ -20,13 +20,14 @@ const calculateInitialBalances = (transactions) => {
 
 const persistedTransactions = getFromStorage("transactions-list") || [];
 const initialBalances = calculateInitialBalances(persistedTransactions);
+const persistedGroupedTransactions = getFromStorage("grouped-transactions") || {
+  today: [],
+  weekly: [],
+  monthly: []
+};
 const initialState = {
   transactions: persistedTransactions,
-  groupedTransactions: {
-    today: [],
-    weekly: [],
-    monthly: [],
-  },
+  groupedTransactions: persistedGroupedTransactions,
   ...initialBalances,
 };
 
@@ -61,10 +62,10 @@ const transactionSlice = createSlice({
     groupTransactions: (state, action) => {
       const { filter } = action.payload;
       const transactions = [...state.transactions];
-      let grouped = {};
-      let sorted = [];
 
-      // Tùy vào filter là 'today', 'weekly', hay 'monthly', sẽ nhóm giao dịch theo cách khác nhau
+      let grouped = {}; // chứa mảng các transaction của từng group 
+      let sorted = []; // chưa danh sách các ngày , tháng , năm đại diện cho group 
+
       if (filter === 'today') {
         const { grouped: todayGrouped, sortedDates } = groupByDate(transactions);
         grouped = todayGrouped;
@@ -77,9 +78,39 @@ const transactionSlice = createSlice({
         const { grouped: monthlyGrouped, sortedMonths } = groupByMonthly(transactions);
         grouped = monthlyGrouped;
         sorted = sortedMonths;
-      }
+        const monthlyStats = {};
+        Object.keys(grouped).forEach(month => {
+          const monthTransactions = grouped[month];
+          const income = monthTransactions
+            .filter(transaction => transaction.transactionType === 'income')
+            .reduce((acc, transaction) => acc + transaction.amount, 0);
 
-      state.groupedTransactions = { ...state.groupedTransactions, [filter]: { grouped, sorted } };
+          const expense = monthTransactions
+            .filter(transaction => transaction.transactionType === 'expense')
+            .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+          const balance = income + expense; // balance = income - expense
+          monthlyStats[month] = { income, expense, balance };
+          // console.log(monthlyStats)
+        });
+        state.groupedTransactions = { 
+          ...state.groupedTransactions, 
+          monthly: { 
+            grouped, 
+            sorted, 
+            stats: monthlyStats 
+          } 
+        };
+      }
+      if (filter !== 'monthly') {
+        state.groupedTransactions = { 
+          ...state.groupedTransactions, 
+          [filter]: { 
+            grouped, 
+            sorted 
+          } }}
+          saveToStorage("grouped-transactions", state.groupedTransactions);
+      // state.groupedTransactions = { ...state.groupedTransactions, [filter]: { grouped, sorted  } };
     },
   },
 });
@@ -100,5 +131,4 @@ const updateTotalBalance = (state) => {
 };
 
 export const { addTransaction, updateTransaction, removeTransaction, groupTransactions } = transactionSlice.actions;
-
 export default transactionSlice.reducer;
