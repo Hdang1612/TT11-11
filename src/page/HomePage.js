@@ -5,7 +5,11 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { formatCurrency } from "../component/ExpenseItem";
 import ExpenseList from "../component/ExpenseList";
-import ChartStatistic from "../component/ChartStatistic";
+import {
+  ChartStatisticBalance,
+  ChartStatisticExpense,
+  ChartStatisticIncome,
+} from "../component/ChartStatistic";
 function HomePage() {
   const balance = useSelector((state) => state.transactions.totalBalance);
   const [filter, setFilter] = useState("monthly");
@@ -28,9 +32,18 @@ function HomePage() {
                 {balance !== null ? formatCurrency(balance) : "0.00"}
               </span>
             </div>
+          </div> 
+          <div className="statistic-container w-full h-[120px] sm:h-[200px] flex gap-4 ">
+          <div className=" w-full block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
+            <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance>
           </div>
-          <div className="w-full h-[120px] sm:h-[200px] bg-gray-200 rounded-[10px] mt-4  ">
-            <ChartStatistic className="h-max-200"></ChartStatistic >
+          <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
+            <ChartStatisticIncome className="h-max-200"></ChartStatisticIncome>
+          </div>
+          <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
+            <ChartStatisticExpense className="h-max-200"></ChartStatisticExpense>
+          </div>
+
           </div>
           <div>
             <div className="flex justify-between mt-4 gap-2 md:gap-5 ">
@@ -73,5 +86,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-

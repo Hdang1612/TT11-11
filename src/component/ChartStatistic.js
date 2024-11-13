@@ -20,8 +20,146 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+export const ChartStatisticIncome = () => {
+  const groupedTransactions = useSelector(
+    (state) => state.transactions.groupedTransactions?.monthly || {}
+  );
 
-const ChartStatistic = () => {
+  const [incomeData, setIncomeData] = useState({});
+
+  useEffect(() => {
+    const monthlyStats = groupedTransactions?.stats || {};
+    const labels = [];
+    const incomeData = [];
+
+    const allMonths = [
+      "Jan 2024",
+      "Feb 2024",
+      "Mar 2024",
+      "Apr 2024",
+      "May 2024",
+      "Jun 2024",
+      "Jul 2024",
+      "Aug 2024",
+      "Sep 2024",
+      "Oct 2024",
+      "Nov 2024",
+      "Dec 2024",
+    ];
+
+    allMonths.forEach((month) => {
+      labels.push(month.split(" ")[0]);
+
+      const stats = monthlyStats[month] || { income: 0 };
+      incomeData.push(stats.income);
+    });
+
+    setIncomeData({
+      labels,
+      datasets: [
+        {
+          label: "Income",
+          data: incomeData,
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+        },
+      ],
+    });
+  }, [groupedTransactions]);
+
+  return (
+    <div>
+      {incomeData.labels && incomeData.datasets ? (
+        <Bar
+          data={incomeData}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                display: false,
+              },
+            },
+          }}
+        />
+      ) : (
+        <p>Loading income data...</p>
+      )}
+    </div>
+  );
+};
+export const ChartStatisticExpense = () => {
+  const groupedTransactions = useSelector(
+    (state) => state.transactions.groupedTransactions?.monthly || {}
+  );
+
+  const [expenseData, setExpenseData] = useState({});
+
+  useEffect(() => {
+    const monthlyStats = groupedTransactions?.stats || {};
+    const labels = [];
+    const expenseData = [];
+
+    const allMonths = [
+      "Jan 2024",
+      "Feb 2024",
+      "Mar 2024",
+      "Apr 2024",
+      "May 2024",
+      "Jun 2024",
+      "Jul 2024",
+      "Aug 2024",
+      "Sep 2024",
+      "Oct 2024",
+      "Nov 2024",
+      "Dec 2024",
+    ];
+
+    allMonths.forEach((month) => {
+      labels.push(month.split(" ")[0]);
+
+      const stats = monthlyStats[month] || { expense: 0 };
+      expenseData.push(stats.expense);
+    });
+
+    setExpenseData({
+      labels,
+      datasets: [
+        {
+          label: "Expense",
+          data: expenseData,
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+    });
+  }, [groupedTransactions]);
+
+  return (
+    <div>
+      {expenseData.labels && expenseData.datasets ? (
+        <Bar
+          data={expenseData}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                display: false,
+              },
+            },
+          }}
+        />
+      ) : (
+        <p>Loading expense data...</p>
+      )}
+    </div>
+  );
+};
+
+export const ChartStatisticBalance = () => {
   const groupedTransactions = useSelector(
     (state) => state.transactions.groupedTransactions?.monthly || {}
   );
@@ -78,24 +216,24 @@ const ChartStatistic = () => {
       setChartData({
         labels,
         datasets: [
-          // {
-          //   label: "Income",
-          //   data: incomeData,
-          //   backgroundColor: "rgba(75, 192, 192, 0.6)", // Màu nền cho cột thu nhập
-          //   borderColor: "rgba(75, 192, 192, 1)", // Đường viền cột thu nhập
-          //   borderWidth: 1,
-          // },
-          // {
-          //   label: "Expense",
-          //   data: expenseData,
-          //   backgroundColor: "rgba(255, 99, 132, 0.6)", // Màu nền cho cột chi tiêu
-          //   borderColor: "rgba(255, 99, 132, 1)", // Đường viền cột chi tiêu
-          //   borderWidth: 1,
-          // },
+        //   {
+        //     label: "Income",
+        //     data: incomeData,
+        //     backgroundColor: "rgba(75, 192, 192, 0.6)", // Màu nền cho cột thu nhập
+        //     borderColor: "rgba(75, 192, 192, 1)", // Đường viền cột thu nhập
+        //     borderWidth: 1,
+        //   },
+        //   {
+        //     label: "Expense",
+        //     data: expenseData,
+        //     backgroundColor: "rgba(255, 99, 132, 0.6)", // Màu nền cho cột chi tiêu
+        //     borderColor: "rgba(255, 99, 132, 1)", // Đường viền cột chi tiêu
+        //     borderWidth: 1,
+        //   },
           {
             label: "Balance",
             data: balanceData,
-            backgroundColor: "rgba(153, 102, 255, 0.6)", // Màu nền cho cột số dư
+            backgroundColor: "#42224A", // Màu nền cho cột số dư
             borderColor: "rgba(153, 102, 255, 1)", // Đường viền cột số dư
             borderWidth: 1,
           },
@@ -126,5 +264,3 @@ const ChartStatistic = () => {
     </div>
   );
 };
-
-export default ChartStatistic;
