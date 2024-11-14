@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
+
+
+import React, { useEffect,useState } from "react";
 import { Modal, Button, Input, Select, Upload } from "antd";
-import { useDispatch } from "react-redux";
-import {
-  addTransaction,
-  updateTransaction,
-  removeTransaction,
-  groupTransactions
-} from "../../redux-toolkit/transaction.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addTransaction, updateTransaction, removeTransaction } from "../../redux-toolkit/transactionSlice.js";
+import { showSuccessToast, showErrorToast } from "../Toaste.js";
 import { v4 as uuidv4 } from "uuid";
 import { transactionTypes } from "../ExpenseItem.js";
-import { showSuccessToast, showErrorToast } from "../Toaste.js";
-const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
+import { closeModal } from "../../redux-toolkit/modalSlice";  // Import action từ modalSlice
+const ModalExpense = () => {
   const dispatch = useDispatch();
+  const { isShow, mode, transactionData } = useSelector((state) => state.modal);  // Lấy trạng thái từ Redux store
 
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("Shopping");
@@ -42,6 +40,7 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
     setReceipt(null);
     setIsExpense(true);
   };
+
   const handleSave = () => {
     if (!date || !category || !amount) {
       showErrorToast("Vui lòng nhập đầy đủ");
@@ -66,23 +65,23 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
       showSuccessToast("Cập nhật thành công");
     }
 
-    onClose();
+    dispatch(closeModal()); 
     resetFields();
   };
 
   const handleDelete = () => {
     if (transactionData) {
       dispatch(removeTransaction(transactionData.id));
-      showSuccessToast("Giao dịch đã được xóa");
-      onClose(); // Đóng modal sau khi xóa
+      showSuccessToast("Xóa thành công");
+      dispatch(closeModal());  
     }
   };
 
   return (
     <Modal
       title={mode === "add" ? "Add Transaction" : "Update Transaction"}
-      open={isVisible}
-      onCancel={onClose}
+      open={isShow}
+      onCancel={() => dispatch(closeModal())}  
       width="80%"
       footer={null}
     >
@@ -109,7 +108,6 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
             Income
           </button>
         </div>
-
         <div>
           <input
             type="date"
@@ -118,7 +116,6 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
             onChange={(e) => setDate(e.target.value)}
           />
         </div>
-
         <select
           className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
           value={category}
@@ -151,7 +148,6 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
           />
         </div>
 
-        {/* Receipt Upload */}
         <div>
           <label className="text-sm font-semibold md-text-xl">
             Expense Receipt Image
@@ -159,23 +155,16 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
           <Upload
             beforeUpload={(file) => {
               setReceipt(file);
-              return false; // Prevent auto upload
+              return false; 
             }}
           >
             <Button>Upload Receipt</Button>
           </Upload>
-          {/* <input
-            type="file"
-            className="w-full rounded-[15px] h-[32px] md:h-[60px] md:rounded-full md:text-2xl md:ps-5 bg-[#D9D9D9] font-bold text-[14px] px-3"
-            onChange={(e) => setReceipt(e.target.files[0])}
-          /> */}
         </div>
-
-        {/* Action Buttons */}
+        
         <div className="flex justify-between mt-4">
           {mode === "update" ? (
             <Button
-              key="delete"
               onClick={handleDelete}
               className="w-[48%] h-[32px] bg-[#CFBBD4] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white"
             >
@@ -183,20 +172,12 @@ const ModalExpense = ({ isVisible, onClose, mode, transactionData }) => {
             </Button>
           ) : (
             <Button
-              key="cancel"
-              onClick={onClose}
-              className="w-[48%] h-[32px] bg-[#CFBBD4] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-black flex items-center justify-center text-center"
+              onClick={() => dispatch(closeModal())}
+              className="w-[48%] h-[32px] bg-[#CFBBD4] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-black"
             >
               Cancel
             </Button>
           )}
-          {/* <Button
-            key="cancel"
-            onClick={onClose}
-            className="w-[48%] h-[32px] bg-[#CFBBD4] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-black flex items-center justify-center text-center "
-          >
-            Cancel
-          </Button> */}
           <Button
             onClick={handleSave}
             className="w-[48%] h-[32px] bg-[#EF8767] rounded-[15px] md:h-[60px] md:rounded-full md:text-2xl font-bold text-[14px] text-white"

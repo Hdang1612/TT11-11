@@ -5,14 +5,22 @@ import PieStatistic from "../component/PieStatistic";
 import { useState } from "react";
 import { PieStatisticMonth } from "../component/ChartStatistic";
 import FilterContainer from "../component/FilterMonth";
+import ModalExpense from "../component/modal/ModalTransaction";
+import { useSelector, useDispatch } from "react-redux";
+import { closeModal } from "../redux-toolkit/modalSlice";
 function Report() {
-  const [selectedMonth, setSelectedMonth] = useState("Nov"); 
-
+  const dispatch = useDispatch();
+  const [selectedMonth, setSelectedMonth] = useState("Nov");
+  const modalStatus = useSelector((state) => state.modal);
+  const handleCloseModal = () => {
+    dispatch(closeModal());
+  };
 
   const handleFilter = (month) => {
-      setSelectedMonth(month); 
-      console.log(selectedMonth)
+    setSelectedMonth(month);
+    console.log(selectedMonth);
   };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="w-full  h-[100vh] bg-white relative border-black border-2">
@@ -26,16 +34,22 @@ function Report() {
             </div>
           </div>
           <div className="  flex flex-col justify-center mt-0  ">
-            {/* < className="flex flex-col "> */}
             <p className="text-center mb-5 text-2xl">Monthly Expense</p>
-              <div className="filter-container flex justify-center">
+            <div className="filter-container flex justify-center">
               <FilterContainer onFilter={handleFilter} />
-              </div>
-              <PieStatisticMonth month={selectedMonth} />
-            
+            </div>
+            <PieStatisticMonth month={selectedMonth} />
           </div>
         </div>
         <Menu className="absolute bottom-0 left-0 w-full"></Menu>
+        {modalStatus.isShow && (
+          <ModalExpense
+            isVisible={modalStatus.isShow}
+            onClose={handleCloseModal}
+            mode={modalStatus.mode}
+            transactionData={modalStatus.transactionData}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,6 @@
 import React from "react";
 import { ShoppingCartOutlined, FileTextOutlined, DollarCircleOutlined, GiftOutlined,FileUnknownOutlined } from '@ant-design/icons';
-export const formatCurrency= (amount) => {
-  return amount.toLocaleString('vi-VN', {
-    style: 'decimal', 
-    minimumFractionDigits: 0, 
-    maximumFractionDigits: 0, 
-  });
-}
-
+import { formatCurrency } from "../untils/number";
 export const transactionTypes = [
   { type: 'Shopping', icon: <ShoppingCartOutlined /> },
   { type: 'Bill', icon: <FileTextOutlined /> },

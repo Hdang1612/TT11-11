@@ -7,9 +7,16 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-function Menu({ onAddExpenseClick }) {
-  const location = useLocation(); // Hook để lấy thông tin về đường dẫn hiện tại
-
+import { openModal } from "../redux-toolkit/modalSlice";
+import { useDispatch } from "react-redux";
+function Menu() {
+  const dispatch = useDispatch();
+  const location = useLocation(); 
+  
+  const handleOpenAddModal = () => {
+    console.log("click");
+    dispatch(openModal({ mode: "add", transactionData: null }));
+  };
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -23,7 +30,6 @@ function Menu({ onAddExpenseClick }) {
           <BellOutlined className="text-xl md:text-[24px]" />
           <span className="text-[10px] sm:text-xl">Reminder</span>
         </Link>
-
         <Link
           // to="/receipt"
           className={`flex flex-col items-center md:py-3 ${
@@ -35,7 +41,7 @@ function Menu({ onAddExpenseClick }) {
         </Link>
 
         <div
-          onClick={onAddExpenseClick}
+          onClick={handleOpenAddModal}
           className="relative flex flex-col items-center justify-center cursor-pointer"
         >
           <div className="absolute bottom-0 -translate-y-[0px] md:translate-y-[-10px]">

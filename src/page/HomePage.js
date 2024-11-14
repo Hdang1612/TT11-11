@@ -2,14 +2,10 @@ import React from "react";
 import { DollarOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import Menu from "../layout/Menu";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { formatCurrency } from "../component/ExpenseItem";
+import { useSelector, useDispatch } from "react-redux";
 import ExpenseList from "../component/ExpenseList";
-import {
-  ChartStatisticBalance,
-  ChartStatisticExpense,
-  ChartStatisticIncome,
-} from "../component/ChartStatistic";
+import { formatCurrency } from "../untils/number";
+import { openModal, closeModal } from "../redux-toolkit/modalSlice";
 import ModalExpense from "../component/modal/ModalTransaction";
 function HomePage() {
   const balance = useSelector((state) => state.transactions.totalBalance);
@@ -19,25 +15,7 @@ function HomePage() {
     setFilter(filterType);
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái modal
-  const [modalMode, setModalMode] = useState("add");
-  const [currentTransaction, setCurrentTransaction] = useState(null);
-
-  const handleOpenAddModal = () => {
-    setModalMode("add");
-    setCurrentTransaction(null);
-    setIsModalVisible(true);
-  };
-  
-  const handleOpenUpdateModal = (transaction) => {
-    setModalMode("update");
-    setCurrentTransaction(transaction);
-    setIsModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
+  const modalStatus = useSelector((state) => state.modal);
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -56,13 +34,13 @@ function HomePage() {
           </div>
           <div className="statistic-container w-full h-[120px] h-[200px] flex gap-4 ">
             <div className=" w-full block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
-              <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance>
+              {/* <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance> */}
             </div>
             <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
-              <ChartStatisticIncome className="h-max-200"></ChartStatisticIncome>
+              {/* <ChartStatisticIncome className="h-max-200"></ChartStatisticIncome> */}
             </div>
             <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
-              <ChartStatisticExpense className="h-max-200"></ChartStatisticExpense>
+              {/* <ChartStatisticExpense className="h-max-200"></ChartStatisticExpense> */}
             </div>
           </div>
           <div>
@@ -95,24 +73,19 @@ function HomePage() {
               </button>
             </div>
             <div className="mt-4  flex-1  overflow-y-auto">
-              <ExpenseList
-                filter={filter}
-                onTransactionClick={handleOpenUpdateModal}
-              />
-              {/* <ExpenseList filter={filter} /> */}
+              <ExpenseList filter={filter} />
             </div>
           </div>
         </div>
         <Menu
-          onAddExpenseClick={handleOpenAddModal}
+          // onAddExpenseClick={handleOpenAddModal}
           className="absolute bottom-0 left-0 w-full "
         ></Menu>
-        {isModalVisible && (
+        {modalStatus.isShow && (
           <ModalExpense
-          isVisible={isModalVisible}
-          onClose={handleCloseModal}
-          mode={modalMode}
-          transactionData={currentTransaction}
+            isVisible={modalStatus.isShow}
+            mode={modalStatus.mode}
+            transactionData={modalStatus.transactionData}
           />
         )}
       </div>

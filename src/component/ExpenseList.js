@@ -1,36 +1,41 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ExpenseItem from "./ExpenseItem";
-import { useEffect } from "react";
-import { groupTransactions } from "../redux-toolkit/transaction";
+import { groupByDate,groupByMonth,groupByWeek } from "../untils/filterTransaction";
+import { useDispatch } from "react-redux";
+import { openModal } from "../redux-toolkit/modalSlice";
 const ExpenseList = ({ filter, onTransactionClick }) => {
-  const dispatch = useDispatch();
-
-  const groupedTransactions = useSelector(
-    (state) => state.transactions.groupedTransactions[filter]
-  );
   const transactions = useSelector((state) => state.transactions.transactions);
+  const dispatch=useDispatch()
+  
+  const handleOpenUpdateModal = (transaction) => {
+    dispatch(openModal({ mode: "update", transactionData: transaction }));
+  };
 
-  useEffect(() => {
-    dispatch(groupTransactions({ filter }));
-  }, [filter, dispatch]);
-
-  useEffect(() => {
-    if (transactions.length > 0) {
-      dispatch(groupTransactions({ filter }));
+  const filterTransactions = (filter) => {
+    switch (filter) {
+      case "today":
+        return groupByDate(transactions);
+      case "weekly":
+        return groupByWeek(transactions);
+      case "monthly":
+        return groupByMonth(transactions);
+      default:
+        return { grouped: {}, sorted: [] };
     }
-  }, [transactions, filter, dispatch]);
+  };
+
+  const { grouped, sorted } = filterTransactions(filter);
 
   return (
-    <div className="max-h-[560px]  md:max-h-[460px]">
-      {groupedTransactions?.sorted?.map((group) => (
+    <div className="max-h-[560px] md:max-h-[460px]">
+      {sorted.map((group) => (
         <div key={group}>
-          <p className=" text-[16px] font-medium">{group}</p>
-          {groupedTransactions.grouped[group].map((transaction) => (
+          <p className="text-[16px] font-medium">{group}</p>
+          {grouped[group].map((transaction) => (
             <div
               key={transaction.id}
-              onClick={() => onTransactionClick(transaction)}
+              onClick={() => handleOpenUpdateModal(transaction)}
               className="cursor-pointer"
             >
               <ExpenseItem
