@@ -10,12 +10,33 @@ import {
   ChartStatisticExpense,
   ChartStatisticIncome,
 } from "../component/ChartStatistic";
+import ModalExpense from "../component/modal/ModalTransaction";
 function HomePage() {
   const balance = useSelector((state) => state.transactions.totalBalance);
   const [filter, setFilter] = useState("today");
 
   const handleFilterChange = (filterType) => {
     setFilter(filterType);
+  };
+
+  const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái modal
+  const [modalMode, setModalMode] = useState("add");
+  const [currentTransaction, setCurrentTransaction] = useState(null);
+
+  const handleOpenAddModal = () => {
+    setModalMode("add");
+    setCurrentTransaction(null);
+    setIsModalVisible(true);
+  };
+  
+  const handleOpenUpdateModal = (transaction) => {
+    setModalMode("update");
+    setCurrentTransaction(transaction);
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -32,18 +53,17 @@ function HomePage() {
                 {balance !== null ? formatCurrency(balance) : "0.00"}
               </span>
             </div>
-          </div> 
+          </div>
           <div className="statistic-container w-full h-[120px] h-[200px] flex gap-4 ">
-          <div className=" w-full block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
-            <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance>
-          </div>
-          <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
-            <ChartStatisticIncome className="h-max-200"></ChartStatisticIncome>
-          </div>
-          <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
-            <ChartStatisticExpense className="h-max-200"></ChartStatisticExpense>
-          </div>
-
+            <div className=" w-full block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
+              <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance>
+            </div>
+            <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
+              <ChartStatisticIncome className="h-max-200"></ChartStatisticIncome>
+            </div>
+            <div className="hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 ">
+              <ChartStatisticExpense className="h-max-200"></ChartStatisticExpense>
+            </div>
           </div>
           <div>
             <div className="flex justify-between mt-4 gap-2 md:gap-5 ">
@@ -75,11 +95,26 @@ function HomePage() {
               </button>
             </div>
             <div className="mt-4  flex-1  overflow-y-auto">
-              <ExpenseList filter={filter} />
+              <ExpenseList
+                filter={filter}
+                onTransactionClick={handleOpenUpdateModal}
+              />
+              {/* <ExpenseList filter={filter} /> */}
             </div>
           </div>
         </div>
-        <Menu className="absolute bottom-0 left-0 w-full "></Menu>
+        <Menu
+          onAddExpenseClick={handleOpenAddModal}
+          className="absolute bottom-0 left-0 w-full "
+        ></Menu>
+        {isModalVisible && (
+          <ModalExpense
+          isVisible={isModalVisible}
+          onClose={handleCloseModal}
+          mode={modalMode}
+          transactionData={currentTransaction}
+          />
+        )}
       </div>
     </div>
   );

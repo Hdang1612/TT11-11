@@ -13,8 +13,8 @@ export const transactionTypes = [
   { type: 'Bill', icon: <FileTextOutlined /> },
   { type: 'Salary', icon: <DollarCircleOutlined /> },
   { type: 'Food', icon: <GiftOutlined /> },
-  { type: 'Entertainment', icon: <ShoppingCartOutlined /> }, // Có thể thay đổi icon tùy theo nhu cầu
-  { type: 'Unknown', icon: <FileUnknownOutlined /> }, // Có thể thay đổi icon tùy theo nhu cầu
+  { type: 'Entertainment', icon: <ShoppingCartOutlined /> }, 
+  { type: 'Unknown', icon: <FileUnknownOutlined /> },
 ];
 
 const ExpenseItem = ({ name, description, amount }) => {
@@ -28,7 +28,6 @@ const ExpenseItem = ({ name, description, amount }) => {
         
       >
         {icon}
-        {/* <ShoppingCartOutlined className="text-[20px]"></ShoppingCartOutlined> */}
       </div>
       <div className="ml-3">
         <p className="text-[16px] md:text-2xl font-regular text-[#000000]">{name}</p>

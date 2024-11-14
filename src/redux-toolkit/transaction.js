@@ -43,8 +43,8 @@ const transactionSlice = createSlice({
     },
     
     updateTransaction: (state, action) => {
-      const { id, updatedData } = action.payload;
-      const transactionIndex = state.transactions.findIndex(transaction => transaction.id === id);
+      const updatedData = action.payload;
+      const transactionIndex = state.transactions.findIndex(transaction => transaction.id ===updatedData.id);
       if (transactionIndex >= 0) {
         state.transactions[transactionIndex] = { ...state.transactions[transactionIndex], ...updatedData };
         saveToStorage("transactions-list", state.transactions);

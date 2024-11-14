@@ -1,18 +1,15 @@
 // GeneralReport.js
 import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2"; // Biểu đồ tròn
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useSelector } from "react-redux";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieStatistic = () => {
-  const { totalIncome, totalExpense } = useSelector((state) => state.transactions);
+  const { totalIncome, totalExpense } = useSelector(
+    (state) => state.transactions
+  );
 
   const [chartData, setChartData] = useState({});
   const [options, setOptions] = useState({});
@@ -41,28 +38,18 @@ const PieStatistic = () => {
 
     setOptions({
       responsive: true,
-    //   maintainAspectRatio: false,
       plugins: {
         legend: {
           position: "top",
         },
-        
       },
     });
   }, [totalIncome, totalExpense]);
 
   return (
-    
-    // <div>
-    //   <h2>Income vs Expense Report</h2>
-    //   <Pie data={chartData} options={options} />
-    // </div>
     <div>
       {chartData.labels && chartData.datasets ? (
-        <Pie
-          data={chartData}
-          options={options}
-        />
+        <Pie data={chartData} options={options} />
       ) : (
         <p>Loading expense data...</p>
       )}
