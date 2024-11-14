@@ -1,9 +1,9 @@
 import React from "react";
 import Menu from "../layout/Menu";
 import Header from "../layout/Header";
-import PieStatistic from "../component/PieStatistic";
+import PieStatistic from "../component/chart/PieStatistic";
 import { useState } from "react";
-import { PieStatisticMonth } from "../component/ChartStatistic";
+import { PieStatisticMonth } from "../component/chart/ChartStatistic";
 import FilterContainer from "../component/FilterMonth";
 import ModalExpense from "../component/modal/ModalTransaction";
 import { useSelector, useDispatch } from "react-redux";

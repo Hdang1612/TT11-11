@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { useSelector } from "react-redux";
-import { groupByMonth ,calculateMonthlyTotals } from "../untils/filterTransaction";
+import { groupByMonth ,calculateMonthlyTotals } from "../../untils/filterTransaction";
 
 // Đăng ký các thành phần của Chart.js
 ChartJS.register(
