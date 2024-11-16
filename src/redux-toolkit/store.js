@@ -1,12 +1,12 @@
 // store.js
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
 import transactionReducer from './transactionSlice'
 import modalReducer from './modalSlice'
 const store = configureStore({
   reducer: {
     transactions: transactionReducer,
-    modal:modalReducer
+    modal: modalReducer,
   },
-});
+})
 
-export default store;
+export default store

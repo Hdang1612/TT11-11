@@ -1,28 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   isShow: false,
-  title: "",
+  title: '',
   transactionData: null,
-};
+}
 
 export const modalSlice = createSlice({
-  name: "modal",
+  name: 'modal',
   initialState,
   reducers: {
-    openModal: (state, action) => {
-        state.isShow = true;
-        state.mode = action.payload.mode;  
-        state.transactionData = action.payload.transactionData || null;
-      },
-    closeModal: (state) => {
-        state.isShow = false;
-        state.transactionData = null;  
-      },
+    toggleModal: (state, action) => {
+      state.isShow = action.payload
+    },
+    setModalTitle: (state, action) => {
+      state.title = action.payload
+    },
+    setTransactionData: (state, action) => {
+      state.transactionData = action.payload
+    },
+    resetTransactionData: (state) => {
+      state.transactionData = null
+    },
   },
-});
+})
 
-export const { openModal, closeModal } =
-  modalSlice.actions;
+export const { toggleModal, setTransactionData, setModalTitle, resetTransactionData } =
+  modalSlice.actions
 
-export default modalSlice.reducer;
+export default modalSlice.reducer
