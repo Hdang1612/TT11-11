@@ -1,13 +1,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-
+import { ArrowRightOutlined,ArrowLeftOutlined } from '@ant-design/icons'
 import { setCurrentPage, setItemsPerPage } from '../redux-toolkit/transactionSlice'
 import Header from '../layout/Header'
 import Menu from '../layout/Menu'
 import { TransactionListPagination } from '../component/TransactionList'
 import ModalExpense from '../component/modal/ModalTransaction'
 import { toggleModal, resetTransactionData } from '../redux-toolkit/modalSlice'
+
 function TransactionPage() {
   const dispatch = useDispatch()
   const modalStatus = useSelector((state) => state.modal)
@@ -27,6 +28,18 @@ function TransactionPage() {
   const handleCloseModal = () => {
     dispatch(toggleModal(false))
     dispatch(resetTransactionData)
+  }
+
+  const pageLimit = 3 // Number of pages to show at once
+  let startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2))
+  let endPage = Math.min(totalPages, currentPage + Math.floor(pageLimit / 2))
+
+  if (endPage - startPage + 1 < pageLimit) {
+    if (currentPage - startPage < currentPage) {
+      endPage = Math.min(totalPages, endPage + (pageLimit - (endPage - startPage + 1)))
+    } else {
+      startPage = Math.max(1, startPage - (pageLimit - (endPage - startPage + 1)))
+    }
   }
   return (
     <div className='min-h-screen bg-gray-100 flex items-center justify-center '>
@@ -49,26 +62,35 @@ function TransactionPage() {
             </select>
           </div>
 
-          <div className='overflow-y-auto h-[500px]'>
-          <TransactionListPagination transactions={paginatedTransactions} />
-
+          <div className='overflow-y-auto h-[600px] md:h-[500px]'>
+            <TransactionListPagination transactions={paginatedTransactions} />
           </div>
-
           <div className='mt-6 flex justify-center space-x-2'>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                disabled={page === currentPage}
-                className={`px-4 py-2 text-lg font-semibold rounded-lg transition-colors duration-200 ${
-                  page === currentPage
-                    ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
-                    : 'bg-white border border-gray-300 hover:bg-gray-200'
-                }`}
-              >
-                {page}
-              </button>
-            ))}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 text-lg font-semibold rounded-lg transition-colors duration-200 ${
+                currentPage === 1
+                  ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
+                  : 'bg-white border border-gray-300 hover:bg-gray-200'
+              }`}
+            >
+              <ArrowLeftOutlined />
+            </button>
+            <span className='px-4 py-2 text-lg font-semibold'>
+              {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 text-lg font-semibold rounded-lg transition-colors duration-200 ${
+                currentPage === totalPages
+                  ? 'bg-gray-300 text-gray-700 cursor-not-allowed'
+                  : 'bg-white border border-gray-300 hover:bg-gray-200'
+              }`}
+            >
+             <ArrowRightOutlined />
+            </button>
           </div>
         </div>
       </div>

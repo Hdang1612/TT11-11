@@ -14,7 +14,7 @@ import {
 } from '../component/TransactionList'
 function HomePage() {
   const balance = useSelector((state) => state.transactions.totalBalance)
-  const [filter, setFilter] = useState('today')
+  const [filter, setFilter] = useState('weekly')
 
   const handleFilterChange = (filterType) => {
     setFilter(filterType)
@@ -35,17 +35,14 @@ function HomePage() {
               </span>
             </div>
           </div>
-          <div className='statistic-container w-full  h-[200px] flex gap-4 '>
+          {/* <div className='statistic-container w-full  h-[200px] flex gap-4 '>
             <div className=' w-full block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 '>
-              {/* <ChartStatisticBalance className="h-max-200"></ChartStatisticBalance> */}
             </div>
             <div className='hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 '>
-              {/* <ChartStatisticIncome className="h-max-200"></ChartStatisticIncome> */}
             </div>
             <div className='hidden md:block bg-gray-200 rounded-[10px] mt-4 md:w-1/3 '>
-              {/* <ChartStatisticExpense className="h-max-200"></ChartStatisticExpense> */}
             </div>
-          </div>
+          </div> */}
           <div>
             <div className='flex justify-between mt-4 gap-2 md:gap-5 '>
               <button

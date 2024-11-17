@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-
+import { Empty } from 'antd'
 import {
   selectTodayTransactions,
   selectMonthlyTransactions,
@@ -17,7 +17,7 @@ export const TransactionListPagination = ({ transactions }) => {
     dispatch(toggleModal(true))
   }
   return (
-    <div className='h-max-[400px] '>
+    <div >
       {transactions.length > 0 ? (
         transactions.map((transaction) => (
           <ExpenseItem
@@ -29,7 +29,7 @@ export const TransactionListPagination = ({ transactions }) => {
           />
         ))
       ) : (
-        <p>No transactions available.</p>
+        <Empty description="No transaction " />
       )}
     </div>
   )
@@ -42,7 +42,7 @@ export const TransactionList = ({ transactions }) => {
   }
 
   return (
-    <div className='h-[460px]'>
+    <div className='h-[740px] md:h-[660px] '>
       {Array.isArray(transactions) && transactions.length > 0 ? (
         transactions.map((group, index) => {
           if (group.transactions) {
@@ -77,7 +77,7 @@ export const TransactionList = ({ transactions }) => {
           }
         })
       ) : (
-        <p>No transactions</p>
+        <Empty description="No transaction " />
       )}
     </div>
   )

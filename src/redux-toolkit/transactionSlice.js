@@ -102,9 +102,13 @@ const updateTotalBalance = (state) => {
 //các nhóm transaction
 
 export const selectTodayTransactions = (state) => {
-  const today = new Date().toISOString().split('T')[0]
-  return state.transactions.transactions.filter((transaction) => transaction.date === today)
+  const today = new Date().toLocaleDateString('en-GB') 
+  return state.transactions.transactions.filter((transaction) => {
+    const transactionDate = new Date(transaction.date).toLocaleDateString('en-GB')
+    return transactionDate === today
+  })
 }
+
 
 // Nhóm giao dịch theo tuần
 export const selectWeeklyTransactions = (state) => {
