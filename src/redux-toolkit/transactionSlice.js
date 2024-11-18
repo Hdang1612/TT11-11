@@ -118,9 +118,10 @@ export const selectWeeklyTransactions = (state) => {
 
   state.transactions.transactions.forEach((transaction) => {
     const transactionDate = new Date(transaction.date)
-
-    const startOfTransactionWeek = new Date(transactionDate)
-    startOfTransactionWeek.setDate(transactionDate.getDate() - transactionDate.getDay() + 1)
+    const startOfTransactionWeek = new Date(transactionDate);
+startOfTransactionWeek.setDate(
+  transactionDate.getDate() - (transactionDate.getDay() === 0 ? 6 : transactionDate.getDay() - 1)
+);
     const endOfTransactionWeek = new Date(startOfTransactionWeek)
     endOfTransactionWeek.setDate(startOfTransactionWeek.getDate() + 6)
 

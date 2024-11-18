@@ -27,20 +27,10 @@ function TransactionPage() {
 
   const handleCloseModal = () => {
     dispatch(toggleModal(false))
-    dispatch(resetTransactionData)
+    dispatch(resetTransactionData())
   }
 
-  const pageLimit = 3 // Number of pages to show at once
-  let startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2))
-  let endPage = Math.min(totalPages, currentPage + Math.floor(pageLimit / 2))
-
-  if (endPage - startPage + 1 < pageLimit) {
-    if (currentPage - startPage < currentPage) {
-      endPage = Math.min(totalPages, endPage + (pageLimit - (endPage - startPage + 1)))
-    } else {
-      startPage = Math.max(1, startPage - (pageLimit - (endPage - startPage + 1)))
-    }
-  }
+  
   return (
     <div className='min-h-screen bg-gray-100 flex items-center justify-center '>
       <div className='w-full  h-[100vh] bg-white relative '>
